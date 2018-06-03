@@ -1,19 +1,21 @@
-from flask import Flask,request,redirect,abort
+from flask import Flask,request,redirect,abort,render_template
 from flask import make_response
+from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
+bootstrap = Bootstrap(app)
 
 @app.route('/')
 def index():
-    user_agent = request.headers.get('User-Agent')
-    #return '<h1>Hello world!</h1>'
-    #return '<p>Your browser is %s' % user_agent
-    return '<h1>Bad Request</h1>',400
-    return redirect('http://www.baidu.com')
+    return render_template('user.html',name='jhy')
 
-    response = make_response('<h1>This document carries a cookie!</h1>')
-    response.set_cookie('answer','42')
-    return response
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'),404
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('500.html'),500
 
 
 
